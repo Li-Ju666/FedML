@@ -1,0 +1,52 @@
+#### By Li Ju ####
+#### 2020/22/06 ####
+
+This is my study note for neural network. In this article, the most basic model, 
+fully-connected neural network will be introduced. 
+
+Neural network is inspired by biological neural network, which is consisted by numerous connected neurons. 
+Each neuron has multiple input and output. 
+It is basically an operator, accepting input current and producing output current to its target neurons. 
+Artificial neural network is a simulation for this, but of course, a lot of modification can be done. 
+
+To know how an artificial neural network works, let us explain neuron (node) first. 
+
+[What is node]
+A node is a structure with weights for every input, a bias term and a function, named activation function. 
+The node sums up all its input values with weights and bias, 
+calculates its output value with activation function. 
+The output value will be input for other nodes, which are assumed as "connect with this node". 
+Normally most activation functions are not linear functions, like sigmoid, Relu and others. 
+
+Mathematically, if we define input values as vector A, weights as W, bias term as b, activation
+function as F_activate, and output value as z, the function of a node is much simpler: 
+z = F_activate(W*A+b) and z is the input of next node. 
+
+
+[What is layer]
+To organize nodes in a better way, the concept of layers is introduced. 
+In fully-connected network model, nodes within a single layer are not connected, 
+instead, they connect with every nodes at its next layer. 
+Networks with more than 3 layers(1 input layer, 1 output layer and 1 hidden layer) are generally
+called deep neural network. 
+
+[Dimensionality]
+As all the computation will be done with matrix operation, it is important to know how each part of 
+network is represented. Basically there are two approaches to represent input dataset, feature-as-row 
+sample-as-row. 
+
+DEFINE: n - number of samples; M - number of features
+	m_i - number of nodes in ith layer; 
+	M(i*j) - M is a matrix of size i(rows)*j(columns); 
+	Z - output matrix of a layer; A - input matrix of a layer; B - bias term matrix of a layer; 
+	X - original dataset
+For each layer, the computation can be represented as following: 
+1). if original dataset is of feature-as-row: X(M * n)
+	Z(m_i * n) = W(m_i * m_{i-1}) * A(m_{i-1}*n) + B(m_i*1)
+2). if original dataset is of sample-as-row: X(n*M)
+	Z(n*m_i) = A(n * m_{i-1}) * W(m_{i-1} * m_i) + B(1*m_i)
+
+One thing is trivial that: the dimensionality of W*A (or A*W) is not the same as matrix B: here matrix B
+will extend itself as a m_i * n matrix repeating its own values and be added to WA matrix element-wise. 
+
+ 
