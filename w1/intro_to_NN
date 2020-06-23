@@ -111,4 +111,21 @@ To adjust paramters, learning rate n is defined and the parameters are modified 
 
 This is called gradient descent. 
 
+[How to train]
+With forward and back propagation, a model can be trained. 
+Generally the entire dataset are too big to be input during every training iteration. 
+Therefore, the entire dataset can be split into fixed-size batchs, and for each iteration, 
+one batch is input into the model to get an output. With the output and target output, error
+can be calculated with cost function and using back propagation, all weights and biases can 
+be updated. This is called an iteration. 
+
+An epoch is when an entire datasets is passed forward and backward through the network once after
+several iterations. Generally when training a model, several epochs will be done to gain a satisfactory
+performance. However how to determine the right number of epochs remains a question. 
+
+Mathematically, iteration# = epoch# * epoch_size/batch_size. 
+
+[Prediction]
+After training for several epochs, the model is obtained. If a new sample named X_test is to be tested, 
+X_test will be the new input of the model and the output is the prediction for X_test. 
 
