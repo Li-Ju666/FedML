@@ -28,8 +28,10 @@ int main(){
 
     int epochs = 1000; 
     for (int i=0; i<epochs; i++){
-	
-    
-    
+        int trainingsetorder[]={0,1,2,3}; 
+        shuffle(trainingsetorder, num_training); 
+        for(int x=0; x<num_training; x++){
+            int i=trainingsetorder[x]; 
+        }
     }
 }
