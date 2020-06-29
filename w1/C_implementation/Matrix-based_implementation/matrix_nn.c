@@ -26,6 +26,7 @@ double* delta_to_delta(double*, double*, double*, int, int, int);
 double* trans(double*, int, int); 
 void update_bias(double*, double*, double, int, int); 
 void update_weight(double*, double*, double*, double, int, int, int);
+void write_error(char*, double*, int); 
 
 int main(int argc, char** argv){
     if(argc != 3){
@@ -60,7 +61,7 @@ int main(int argc, char** argv){
     /* printf("Add 1 result:\n") ; */ 
     /* matrix_apply(A, 2, 4, add_1); */ 
     /* vis(A, 2, 4); */ 
-
+    /* FILE* fp = fopen("./error.txt", "w"); */ 
     double* input_x = malloc(sizeof(double)*BATCH_SIZE*num_feature); 
     double* input_y = malloc(sizeof(double)*BATCH_SIZE*num_target); 
     /* for(int i=0; i<10; i++){ */
@@ -85,14 +86,16 @@ int main(int argc, char** argv){
 
     double* hidden_layer, *output_layer; 
 
-    for(int iteration; iteration<EPOCH*num_sample/BATCH_SIZE; iteration++){
+    double* error_his = malloc(sizeof(double)*EPOCH*num_sample/BATCH_SIZE);
+    /* if(error_his != NULL){printf("Memory allocation succeed! \n"); } */ 
+    for(int iteration=0; iteration<EPOCH*num_sample/BATCH_SIZE; iteration++){
     /* for(int iteration; iteration<10; iteration++){ */
-	printf("===================\n");
+	/* printf("===================\n"); */
 	shuffle(input_x, input_y, BATCH_SIZE,
 	    training_x, training_y, num_sample,
 	num_feature, num_target);
-	printf("Input: \n"); 
-	vis(input_y, BATCH_SIZE, num_feature); 	
+	/* printf("Input: \n"); */ 
+	/* vis(input_y, BATCH_SIZE, num_feature); */ 	
 	/* Forward pass */	
 	/* Input to hidden layer */
 	hidden_layer = multiply(input_x, BATCH_SIZE, num_feature, 
@@ -114,13 +117,15 @@ int main(int argc, char** argv){
 	/* vis(hidden_bias, 1, HIDDEN_NODE); */ 
 	/* printf("Output bias:\n"); */ 
 	/* vis(output_bias, 1, num_target); */ 
-	printf("Output:\n"); 
-	vis(output_layer, BATCH_SIZE, num_target); 
-	printf("Expected:\n"); 
-	vis(input_y, BATCH_SIZE, num_target); 
+	/* printf("Output:\n"); */ 
+	/* vis(output_layer, BATCH_SIZE, num_target); */ 
+	/* printf("Expected:\n"); */ 
+	/* vis(input_y, BATCH_SIZE, num_target); */ 
 	/* Back propagation */	
 	double error = quad_error(output_layer, input_y, BATCH_SIZE, num_target); 
-	/* printf("Now error is %f. \n", error); */ 
+	/* printf("going to save error! \n"); */ 
+	error_his[iteration] = error; 
+	/* printf("Succeed to save error! \n"); */ 
 	output_delta = last_layer_delta(output_layer,input_y, BATCH_SIZE, num_target); 
 	hidden_delta = delta_to_delta(output_delta, output_weight, hidden_layer, 
 				    num_target, BATCH_SIZE, HIDDEN_NODE); 
@@ -138,9 +143,9 @@ int main(int argc, char** argv){
 	free(hidden_layer); 
 	free(output_layer); 
 	free(output_delta); 
-	free(hidden_delta); 
+	free(hidden_delta);
     }
-
+    
     printf("Hidden weight:\n"); 
     vis(hidden_weight, num_feature, HIDDEN_NODE);
     printf("Hidden bias:\n"); 
@@ -150,6 +155,7 @@ int main(int argc, char** argv){
     printf("Output bias:\n"); 
     vis(output_bias, 1, num_target); 
 
+    write_error("./errors.txt", error_his, EPOCH*num_sample/BATCH_SIZE); 
     free(hidden_weight); 
     free(hidden_bias); 
     free(output_weight); 
@@ -158,6 +164,7 @@ int main(int argc, char** argv){
     free(training_y); 
     free(input_x); 
     free(input_y); 
+    free(error_his); 
     return 0; 
 }
 
@@ -322,4 +329,14 @@ void update_weight(double* weight, double* delta, double* A,
     }
     free(trans_A); 
     free(result); 
+}
+
+void write_error(char* output, double* error, int num){
+    FILE* fp = fopen(output, "w"); 
+    /* printf("File opened! \n"); */ 
+    for(int i=0; i<num; i++){
+	/* printf("%f ", error[i]); */ 
+	fprintf(fp, "%f ", error[i]); 
+    }
+    fclose(fp); 
 }
