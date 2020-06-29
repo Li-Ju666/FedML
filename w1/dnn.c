@@ -75,9 +75,9 @@ int main(){
                 output_layer[j] = sigmoid(activation); 
             }
             
-            printf("Input: %f %f\nOutput: %f\n", 
-                    training_input[i][0], training_input[i][1], output_layer[0]); 
-            /* Back propagation */
+            /* printf("Input: %f %f\nOutput: %f\n", */ 
+            /*         training_input[i][0], training_input[i][1], output_layer[0]); */ 
+            /* /1* Back propagation *1/ */
             
             /* Calculation for output layer delta */
             double delta_output[num_output]; 
