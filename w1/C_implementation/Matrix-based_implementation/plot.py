@@ -1,16 +1,17 @@
 import matplotlib.pyplot as plt
-text_file = open("./C_implementation/Matrix-based_implementation/errors.txt", "r")
-lines = text_file.read().split(' ')
-print(lines)
-print(len(lines))
-text_file.close()
-print(type(lines))
-print(type(lines[0]))
-data = [float(i) for i in lines[:20000]]
-print(type(data))
-print(type(data[0]))
+names = [2, 5, 8, 10, 15, 20, 25, 30, 40, 50]
+for i in names:
 
-plt.plot(data)
-plt.ylabel('Error')
-##plt.show()
-plt.savefig("./C_implementation/Matrix-based_implementation/Error_change.png")
+    text_file = open("./C_implementation/Matrix-based_implementation/error_"+str(i), "r")
+    lines = text_file.read().split(' ')
+    lines.pop()
+    print(len(lines))
+    text_file.close()
+    data = [float(i) for i in lines]
+
+    plt.plot(data)
+    plt.ylabel('Error')
+    ##plt.show()
+    plt.title("Error ~ iteration with hidden nodes: "+str(i))
+    plt.savefig("./C_implementation/Matrix-based_implementation/image"+str(i))
+    plt.close()

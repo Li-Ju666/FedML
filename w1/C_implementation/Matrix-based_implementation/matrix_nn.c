@@ -3,10 +3,11 @@
 #include <string.h>
 #include <math.h>
 
-#define HIDDEN_NODE 2
+/* #define HIDDEN_NODE 10 */
 #define BATCH_SIZE 2
 #define EPOCH 10000
 #define LEARNING_RATE 0.1f
+#define WRITE_PREDICTION 1
 
 double* read_file(const char*, int*, int*); 
 void vis(double*, int, int); 
@@ -29,8 +30,8 @@ void update_weight(double*, double*, double*, double, int, int, int);
 void write_error(char*, double*, int); 
 
 int main(int argc, char** argv){
-    if(argc != 3){
-        printf("Invalid input: 2 parameters required! \n"); 
+    if(argc != 4){
+        printf("Invalid input: 3 parameters required! \n"); 
         return -1; 
     }
     int num_sample1, num_feature, num_sample2, num_target; 
@@ -42,6 +43,7 @@ int main(int argc, char** argv){
     }
     int num_sample = num_sample1; 
     double lr = LEARNING_RATE;  
+    int HIDDEN_NODE = atoi(argv[3]); 
     /* printf("Training set: x\n"); */
     /* vis(training_x, num_sample, num_feature); */
     /* printf("Training set: y\n"); */
@@ -122,7 +124,7 @@ int main(int argc, char** argv){
 	/* printf("Expected:\n"); */ 
 	/* vis(input_y, BATCH_SIZE, num_target); */ 
 	/* Back propagation */	
-	double error = quad_error(output_layer, input_y, BATCH_SIZE, num_target); 
+	double error = quad_error(output_layer, input_y, BATCH_SIZE, num_target)/(BATCH_SIZE*num_target); 
 	/* printf("going to save error! \n"); */ 
 	error_his[iteration] = error; 
 	/* printf("Succeed to save error! \n"); */ 
@@ -155,7 +157,19 @@ int main(int argc, char** argv){
     printf("Output bias:\n"); 
     vis(output_bias, 1, num_target); 
 
-    write_error("./errors.txt", error_his, EPOCH*num_sample/BATCH_SIZE); 
+#if WRITE_PREDICTION
+    /* double* result = multiply(training_x, ) */
+
+#endif   
+ 
+    char* s1 = argv[3]; 
+    char* s2 = "error_"; 
+    char* s3 = malloc(strlen(s1)+strlen(s2)+1); 
+    strcpy(s3, s2); 
+    strcat(s3, s1); 
+
+    write_error(s3, error_his, EPOCH*num_sample/BATCH_SIZE); 
+    free(s3); 
     free(hidden_weight); 
     free(hidden_bias); 
     free(output_weight); 
@@ -174,11 +188,13 @@ double* read_file(const char* file, int* dim1, int* dim2){
         perror("Could not open file! \n"); 
         return NULL; 
     }
-    fscanf(fp, "%d ", dim1); 
-    fscanf(fp, "%d ", dim2); 
+    if(fscanf(fp, "%d ", dim1) == EOF){return NULL; }
+    if(fscanf(fp, "%d ", dim2) == EOF){return NULL; } 
     double* data = malloc(sizeof(double)*(*dim1)*(*dim2)); 
     for(int i=0; i<(*dim1)*(*dim2); i++){
-        fscanf(fp, "%lf ", &(data[i])); 
+        if(EOF == fscanf(fp, "%lf ", &(data[i]))){
+	    return NULL; 
+	} 
     }
 
     if(0 != fclose(fp)){
@@ -214,6 +230,7 @@ double* multiply(double* A, int A1, int A2, double* B, int B1, int B2){
             }
         }
     }
+    free(temp); 
     return C; 
 }
 
@@ -324,7 +341,7 @@ void update_weight(double* weight, double* delta, double* A,
     double* result = multiply(trans_A, left_dim, batch_size, delta, batch_size, right_dim); 
     for(int i=0; i<left_dim; i++){
 	for(int j=0; j<right_dim; j++){
-	    weight[i*right_dim+j] -= lr*result[i*right_dim+j]; 
+	    weight[i*right_dim+j] -= lr*result[i*right_dim+j]/batch_size; 
 	}
     }
     free(trans_A); 
