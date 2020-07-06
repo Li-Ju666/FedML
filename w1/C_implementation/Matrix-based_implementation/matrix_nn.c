@@ -5,7 +5,7 @@
 
 /* #define HIDDEN_NODE 10 */
 #define BATCH_SIZE 2
-#define EPOCH 10000
+#define EPOCH 100000
 #define LEARNING_RATE 0.1f
 #define WRITE_PREDICTION 1
 
