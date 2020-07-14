@@ -50,6 +50,9 @@ RUN python3 -c "import tensorflow; print(tensorflow.__version__)" \
  && pip3 install matplotlib \
  && pip3 install sklearn
 
+COPY ./script/run.py /srv/
+
 WORKDIR /srv/
 
-CMD python3 ./run.py > result.txt
+# CMD python3 ./run.py > result.txt
+CMD python3
