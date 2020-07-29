@@ -1,0 +1,87 @@
+Containers: 
+    fedn_client: 1 2 3 local model
+    fedn_combiner: 1 global model
+    fedn_reducer: 1
+    fedn_minio: 1 model communication
+    fedn_monitor: 1
+    mongo: 1
+    mongo_express: 1
+    minio: 1 distributed file system
+
+step 1: 
+    mongo-express: try to connnect container "mongo" periodically and keep listening http://0.0.0.0:8081
+    (connection: 172.18.0.2, 172.18.0.6, 172.18.0.4, ) 
+    mongo: create database and listening 0.0.0.0:27017
+    minio: 
+    combiner: run ./seed_and_run
+        initialize locally and wait for clients joining (at least 2 to start)
+    monitor:
+
+step 2: 
+    clients: connect to combiner
+    combiner: request two clients to start - including model sending and model updating request
+
+step 3: 
+    clients: after receive global model from combiner, run python3 train.py to update and train local models
+    combiner: receive models from clients and combine 2 models and get new global model (1/5 round completed)
+
+step 4: 
+    combiner: request model update to two random participants, and request validation to previous two clients
+    clients: those who are requested for update run python3 train.py and those who are about to be validated
+        run python3 validation.py. Both validation results and new models will be sent to combiner. 
+
+step 5: 
+    repeat step 4 till last run. 
+
+Problem: 
+    when the last training round expires, the combiner container raise error, so, evaluation for the last run 
+    will be not be executed. 
+    Reducer: did nothing
+
+[Combiner]: 
+3 classes: 
+    CombinerClient: listen to stream (update and validation), request for update and validation
+
+    FednServer: A central node for data exchange: combiner and clients are all its clients - : 
+            maintaining a data transmition queue
+
+    FedAvg: from CombinerClient
+        own functions "combine_model": including functions after receiving models/ validation from clients 
+        number of participants: controled by config - "active_clients": defaultly it is 2 in /sdk/cli/run_cmd.py
+
+instructions:
+    seed and run.sh: specify seed model, round, number of active clients for each trin round, timeout. 
+    seedmodel is define in init_model.py
+
+    new FednServer: init(project, FedAvg) and run: FedAvg cannot be specified, but in the further other
+    update strategies will be define and specified with start combiner. 
+
+    Initialize update/validation stream, initialize model and request update --- wait for result and, request
+    validation for previous run clients and request new update for random active clients till the last run. 
+
+[clients]: 
+1 class: 
+    Client:
+        listen to update stream, listen to validation stream, train and validate (call script from user given 
+        folder), send status. 
+
+instructions: 
+    create a client objectn and run: keep listening update and validation stream: with a call back function, 
+    otherwise, keep printing "running". 
+
+[reducer]: 
+1 class: 
+    Reducer:
+        connect to combiner, request model and get final global model 
+    
+instructions: 
+    reducer not completed... throw error message very soon and stopped
+
+[minio]: 
+    offer distributed file system
+
+[mongodb]: 
+    offer database for data transmition
+
+[monitor]: 
+   monitor all other clients by listening to status stream (both clients and combiner client, and combiner server)
