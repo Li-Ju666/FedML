@@ -54,5 +54,5 @@ COPY ./run.py /srv/
 
 WORKDIR /srv/
 
-# CMD python3 ./run.py > result.txt
+# CMD python3 ./prepare_data.py > result.txt
 CMD run.py

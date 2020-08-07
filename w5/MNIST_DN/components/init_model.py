@@ -24,7 +24,7 @@ def create_seed_model():
 
 if __name__ == '__main__':
 
-	# Create a seed model and push to Minio
+	# Create a seed models and push to Minio
 	model = create_seed_model()
 	fod, outfile_name = tempfile.mkstemp(suffix='.h5') 
 	model.save(outfile_name)
@@ -35,7 +35,7 @@ if __name__ == '__main__':
 
 	model_id = storage.set_model(outfile_name,is_file=True)
 	os.unlink(outfile_name)
-	print("Created seed model with id: {}".format(model_id))
+	print("Created seed models with id: {}".format(model_id))
 
 	
 

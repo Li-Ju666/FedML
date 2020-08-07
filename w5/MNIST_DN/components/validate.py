@@ -24,7 +24,7 @@ def validate(model,data,sample_fraction=1):
         y_pred = model.predict_classes(x_test)
         clf_report = metrics.classification_report(y_test.argmax(axis=-1),y_pred)
     except Exception as e:
-        print("failed to validate the model {}".format(e),flush=True)
+        print("failed to validate the models {}".format(e),flush=True)
         raise
     
     report = { 

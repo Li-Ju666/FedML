@@ -63,7 +63,7 @@ def fed_learn(trainX, trainY, testX, testY):
     ##trainX, trainY, testX, testY = load_data()
     X, Y = partition_data(trainX, trainY, num_clients)
 
-    ## build global model
+    ## build global models
     global_model = define_model()
     global_weights = global_model.get_weights()
     performance = list()
@@ -82,7 +82,7 @@ def fed_learn(trainX, trainY, testX, testY):
         global_weights = numpy.mean(local_weights_list, axis=0)
         global_model.set_weights(global_weights)
         _, accuracy = global_model.evaluate(testX, testY, verbose=0)
-        print("Global model accuracy: %.2f" % (accuracy * 100))
+        print("Global models accuracy: %.2f" % (accuracy * 100))
         performance.append(accuracy)
 
 def centralized_learn(trainX, trainY, testX, testY):
@@ -91,7 +91,7 @@ def centralized_learn(trainX, trainY, testX, testY):
     model = define_model()
     history = model.fit(trainX, trainY, epochs = num_epoch,
                         batch_size=bs, verbose=1, validation_split=0.2)
-    ##pyplot.title('Classification Accuracy: centralized model')
+    ##pyplot.title('Classification Accuracy: centralized models')
     ##pyplot.plot(history.history['accuracy'], color='blue', label='train')
     ##pyplot.plot(history.history['val_accuracy'], color='orange', label='test')
     ##pyplot.savefig("Centralized.png")

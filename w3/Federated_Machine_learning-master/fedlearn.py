@@ -112,7 +112,7 @@ def define_model():
         model.add(Dense(1, activation='sigmoid'))
 
         #opt = SGD(lr = 0.01, momentum = 0.9)
-        #model.compile(optimizer = opt, loss = 'categorical_crossentropy', metrics = ['accuracy'])
+        #models.compile(optimizer = opt, loss = 'categorical_crossentropy', metrics = ['accuracy'])
         model.compile(loss='mae', optimizer='adam', metrics=['mse','mae'])
 =======
 =======
@@ -120,7 +120,7 @@ def define_model():
         model.add(Dense(1, activation='linear'))
 
         #opt = SGD(lr = 0.01, momentum = 0.9)
-        #model.compile(optimizer = opt, loss = 'categorical_crossentropy', metrics = ['accuracy'])
+        #models.compile(optimizer = opt, loss = 'categorical_crossentropy', metrics = ['accuracy'])
         model.compile(loss='mse', optimizer='adam', metrics=['mse','mae'])
 <<<<<<< HEAD
 >>>>>>> 0c2cd1774e903646b6a8a7e12f9f2ea6a49d8f14
@@ -151,7 +151,7 @@ def fed_learn():
     trainX, trainY, testX, testY = load_data()
     X, Y = partition_data(trainX, trainY, num_clients)
 
-    ## build global model
+    ## build global models
     global_model = define_model()
     global_weights = global_model.get_weights()
 
@@ -177,14 +177,14 @@ def fed_learn():
 <<<<<<< HEAD
 <<<<<<< HEAD
         _, _, mae = global_model.evaluate(testX, testY, verbose=0)
-        print("Global model loss: %.2f" % mae)
+        print("Global models loss: %.2f" % mae)
 =======
         _, _, accuracy = global_model.evaluate(testX, testY, verbose=0)
-        print("Global model accuracy: %.2f" % (accuracy * 100))
+        print("Global models accuracy: %.2f" % (accuracy * 100))
 >>>>>>> 0c2cd1774e903646b6a8a7e12f9f2ea6a49d8f14
 =======
         _, _, accuracy = global_model.evaluate(testX, testY, verbose=0)
-        print("Global model accuracy: %.2f" % (accuracy * 100))
+        print("Global models accuracy: %.2f" % (accuracy * 100))
 >>>>>>> 0c2cd1774e903646b6a8a7e12f9f2ea6a49d8f14
 
 fed_learn()
