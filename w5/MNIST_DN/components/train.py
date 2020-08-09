@@ -26,7 +26,7 @@ def train(model,data,sample_fraction):
 
 if __name__ == '__main__':
     model = krm.load_model(sys.argv[1])
-    model = train(model,'../data/train.csv',sample_fraction=0.1)
+    model = train(model,'../data/raw_data.csv',sample_fraction=0.1)
     model.save(sys.argv[2])
 
 

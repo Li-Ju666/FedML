@@ -9,4 +9,4 @@ print((trainx == data.reshape(50000, 32, 32, 3)).all())
 data = numpy.column_stack((trainy, data))
 print(data.shape)
 
-numpy.savetxt("/home/sariel/PycharmProjects/fedml/FedML/data/train.csv", data, delimiter=",")
+numpy.savetxt("/home/sariel/PycharmProjects/fedml/FedML/data/raw_data.csv", data, delimiter=",")

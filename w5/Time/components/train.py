@@ -18,7 +18,6 @@ def train(model,data,sample_fraction):
     epochs = 1
 
     # Input image dimensions
-    img_rows, img_cols = 32, 32
 
     # The data, split between train and test sets
     (x_train, y_train, classes) = read_data(data,sample_fraction=sample_fraction)
@@ -30,7 +29,7 @@ def train(model,data,sample_fraction):
 
 if __name__ == '__main__':
     model = krm.load_model(sys.argv[1])
-    model = train(model,'../data/raw_data.csv',sample_fraction=0.1)
+    model = train(model,'../data/train.csv',sample_fraction=1)
     model.save(sys.argv[2])
 
 

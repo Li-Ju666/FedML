@@ -63,7 +63,7 @@ def centralized_learn(model, trainX, trainY, testX, testY, file):
     file.write("%f\n"%accuracy)
 
 def run(num):
-    trainX, trainY = read_data("/home/sariel/PycharmProjects/fedml/FedML/data/train.csv", sample_fraction=1)
+    trainX, trainY = read_data("/FedML/data/raw_data.csv", sample_fraction=1)
     testX, testY = read_data("/home/sariel/PycharmProjects/fedml/FedML/data/data1/test.csv", sample_fraction=1)
 
     model = define_model()

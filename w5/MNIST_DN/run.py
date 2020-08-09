@@ -58,7 +58,7 @@ def run(num):
     model = define_model()
     output = open("./central_result.txt", "a")
     for i in range(num):
-        trainX, trainY = read_data("/home/sariel/PycharmProjects/fedml/FedML/data/train.csv", sample_fraction=0.1)
+        trainX, trainY = read_data("/FedML/data/raw_data.csv", sample_fraction=0.1)
         testX, testY = read_data("/home/sariel/PycharmProjects/fedml/FedML/data/data1/test.csv", sample_fraction=0.1)
         centralized_learn(model, trainX, trainY, testX, testY, output)
     ##fed_learn(trainX, trainY, testX, testY)

@@ -11,8 +11,8 @@ def partition_data(filename, num):
     for i in range(num):
         mkdir("../data/data"+str(i+1))
         local = train[i*length:(i+1)*length,:]
-        np.savetxt("../data/data"+str(i+1)+"/train.csv", local, delimiter=",")
-        np.savetxt("../data/data"+str(i+1)+"/test.csv", test, delimiter=",")
-
+        np.savetxt("../data/data"+str(i+1)+"/train.csv", fmt='%.6f', X=local, delimiter=",")
+        np.savetxt("../data/data"+str(i+1)+"/test.csv", fmt='%.6f', X=test, delimiter=",")
+    np.savetxt("../data/new_train.csv", fmt='%.6f', X=train, delimiter=",")
 if __name__ == '__main__':
     partition_data("../data/train.csv", 3)
