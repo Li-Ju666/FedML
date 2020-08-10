@@ -56,8 +56,8 @@ def define_model():
 
 def fed_learn(trainX, trainY, testX, testY):
     num_clients = 5
-    num_run = 20
-    num_epoch = 20
+    num_run = 50
+    num_epoch = 1
     bs = 10
 
     ##trainX, trainY, testX, testY = load_data()
@@ -69,7 +69,7 @@ def fed_learn(trainX, trainY, testX, testY):
     performance = list()
 
     for run_round in range(0, num_run):
-        print("This is run ", run_round)
+        ##print("This is run ", run_round)
         local_weights_list = list()
 
         for client in range(0, num_clients):
@@ -82,21 +82,23 @@ def fed_learn(trainX, trainY, testX, testY):
         global_weights = numpy.mean(local_weights_list, axis=0)
         global_model.set_weights(global_weights)
         _, accuracy = global_model.evaluate(testX, testY, verbose=0)
-        print("Global models accuracy: %.2f" % (accuracy * 100))
+        print("%.4f" % (accuracy * 100))
         performance.append(accuracy)
+    return performance
 
 def centralized_learn(trainX, trainY, testX, testY):
     num_epoch = 50
     bs=10
     model = define_model()
-    history = model.fit(trainX, trainY, epochs = num_epoch,
-                        batch_size=bs, verbose=1, validation_split=0.2)
+    for i in range(num_epoch):
+        history = model.fit(trainX, trainY, epochs = 1,
+                            batch_size=bs, verbose=0, validation_split=0.2)
     ##pyplot.title('Classification Accuracy: centralized models')
     ##pyplot.plot(history.history['accuracy'], color='blue', label='train')
     ##pyplot.plot(history.history['val_accuracy'], color='orange', label='test')
     ##pyplot.savefig("Centralized.png")
-    _, accuracy = model.evaluate(testX, testY, verbose=0)
-    print("Centralized accuracy: ", accuracy*100)
+        _, accuracy = model.evaluate(testX, testY, verbose=0)
+        print("%.4f"%(accuracy*100))
 
 def run():
     trainX, trainY, testX, testY = load_data()
